@@ -29,7 +29,7 @@ export const loader: LoaderFunction = async ({ request }) => {
     const [language] = request.headers.get("Accept-Language").split(",")
     const i18n = await (
         await fetch(
-            `${url.protocol}://${url.host}/translations/data.${language}.json`
+            `${url.protocol}//${url.host}/translations/data.${language}.json`
         )
     ).json()
 
