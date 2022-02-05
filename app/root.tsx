@@ -24,9 +24,13 @@ export let links: LinksFunction = () => {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+    const url = new URL(request.url)
+
     const [language] = request.headers.get("Accept-Language").split(",")
     const i18n = await (
-        await fetch(`http://localhost:3000/translations/data.${language}.json`)
+        await fetch(
+            `${url.protocol}://${url.host}/translations/data.${language}.json`
+        )
     ).json()
 
     return {
