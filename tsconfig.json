@@ -12,8 +12,7 @@
         "strict": true,
         "baseUrl": ".",
         "paths": {
-            "~/*": ["./app/*"],
-            "@mapstore/*": ["./MapStore2/web/client/*"]
+            "~/*": ["./app/*"]
         },
 
         // Remix takes care of building everything in `remix build`.
