@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async ({ request }) => {
             id: map.id,
             title: map.name,
             description: map.description,
-            featured: false,
+            featured: map.featured,
             canEdit: map.canEdit,
             details: map.details,
             thumbnail: map.thumbnail

@@ -4,6 +4,10 @@ import Contents from "../home/Contents"
 import { loader as mapsLoader } from "./maps/index.server"
 import { loader as dashboardsLoader } from "./dashboards/index.server"
 import { loader as geostoriesLoader } from "./geostories/index.server"
+import { loader as featuredLoader } from "./featured/index.server"
+import ResourceGrid from "../home//ResourceGrid"
+import Message from "../MapStore2/web/client/components/I18N/Message"
+import ShowMore from "../MapStore2/web/client/components/misc/ShowMore"
 
 export const loader: LoaderFunction = async ({ request, context, params }) => {
     const url = new URL(request.url)
@@ -13,7 +17,15 @@ export const loader: LoaderFunction = async ({ request, context, params }) => {
     if (url.searchParams.get("geostoriesPage") !== null) {
         return await geostoriesLoader({ request, context, params })
     }
-    return await mapsLoader({ request, context, params })
+    if (url.searchParams.get("mapsPage") !== null) {
+        return await mapsLoader({ request, context, params })
+    }
+    const maps = await mapsLoader({ request, context, params })
+    const featured = await featuredLoader({ request, context, params })
+    return {
+        ...maps,
+        ...featured,
+    }
 }
 
 export default function Index() {
@@ -32,7 +44,29 @@ export default function Index() {
                     id="ms-featured-maps"
                     className="ms-grid-container  container"
                 >
-                    Featured Maps
+                    <ResourceGrid
+                        title={
+                            <h3>
+                                <span>
+                                    <Message msgId="manager.featuredMaps" />
+                                </span>
+                            </h3>
+                        }
+                        colProps={{
+                            xs: 12,
+                            sm: 6,
+                            lg: 3,
+                            md: 4,
+                            className: "ms-map-card-col",
+                        }}
+                        bottom={
+                            <ShowMore
+                                total={data.featuredCount}
+                                items={data.featured}
+                            />
+                        }
+                        resources={data.featured}
+                    />
                 </div>
             </div>
             <Contents data={data} />
