@@ -4,7 +4,7 @@ import { Col, Grid, Nav, NavItem, Row } from 'react-bootstrap';
 import Message from '../MapStore2/web/client/components/I18N/Message';
 import ToolsContainer from './ToolsContainer';
 
-const DefaultTitle = ({ item = {}, index }) => <span><Message msgId={item.title || `Tab ${index}` } msgParams={{ count: item.total + "" }}/></span>;
+const DefaultTitle = ({ item = {}, index }) => <span><Message msgId={item.title || `Tab ${index}` } msgParams={{ count: (item.total ?? "-") + "" }}/></span>;
 
 class ContentTabs extends React.Component {
     static propTypes = {
