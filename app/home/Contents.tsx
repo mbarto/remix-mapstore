@@ -18,6 +18,7 @@ type ContentsProptype = {
 
 const Contents: React.FC<ContentsProptype> = ({ data }) => {
     const [selectedTab, setSelectedTab] = useState(0)
+    const [firstRender, setFirstRender] = useState(true)
 
     const [mapsPage, setMapsPage] = useState(0)
     const [dashboardsPage, setDashboardsPage] = useState(0)
@@ -37,7 +38,11 @@ const Contents: React.FC<ContentsProptype> = ({ data }) => {
     })
     const fetcher = useFetcher()
     useEffect(() => {
-        fetcher.load(`/?mapsPage=${mapsPage}`)
+        if (firstRender) {
+            setFirstRender(false)
+        } else {
+            fetcher.load(`/?mapsPage=${mapsPage}`)
+        }
     }, [mapsPage])
     useEffect(() => {
         if (fetcher?.data?.maps) {
