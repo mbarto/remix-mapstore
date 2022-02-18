@@ -53,10 +53,14 @@ class LoginModal extends React.Component {
         includeCloseButton: true
     };
 
+    setLoginForm = element => {
+        this.loginForm = element
+    };
+
     getForm = () => {
         return (<LoginForm
+            ref={this.setLoginForm}
             role="body"
-            ref="loginForm"
             showSubmitButton={false}
             user={this.props.user}
             loginError={this.props.loginError}
@@ -69,7 +73,6 @@ class LoginModal extends React.Component {
     getFooter = () => {
         return (<span role="footer">
             <Button
-                ref="submit"
                 value={getMessageById(this.context.messages, "user.signIn")}
                 bsStyle="primary"
                 bsSize={this.props.buttonSize}
@@ -78,7 +81,6 @@ class LoginModal extends React.Component {
                 key="submit">{getMessageById(this.context.messages, "user.signIn")}</Button>
             {this.props.includeCloseButton ? <Button
                 key="closeButton"
-                ref="closeButton"
                 bsSize={this.props.buttonSize}
                 onClick={this.handleOnHide}><Message msgId="close"/></Button> : <span/>}
         </span>);
@@ -112,7 +114,7 @@ class LoginModal extends React.Component {
     }
 
     loginSubmit = () => {
-        this.refs.loginForm.submit();
+        this.loginForm.submit();
     };
 }
 

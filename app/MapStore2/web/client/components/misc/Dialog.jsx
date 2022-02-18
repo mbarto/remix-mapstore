@@ -10,7 +10,7 @@ import assign from 'object-assign';
 import PropTypes from 'prop-types';
 import React from 'react';
 import Draggable from 'react-draggable';
-import Spinner from 'react-spinkit';
+// import Spinner from 'react-spinkit';
 
 import Message from '../I18N/Message';
 
@@ -66,7 +66,7 @@ class Dialog extends React.Component {
                     top: "50%",
                     left: "50%",
                     transform: "translate(-50%, -40%)"
-                }}><Message msgId="loading" /><Spinner spinnerName="circle" noFadeIn overrideSpinnerClassName="spinner"/></div></div>);
+                }}><Message msgId="loading" /></div></div>);
         }
         return null;
     };

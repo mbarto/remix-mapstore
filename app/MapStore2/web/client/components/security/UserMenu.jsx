@@ -148,7 +148,6 @@ class UserMenu extends React.Component {
                     {itemArray}
                 </DropDown>
                 <ConfirmModal
-                    ref="unsavedMapModal"
                     show={this.props.displayUnsavedDialog || false}
                     onClose={this.props.onCloseUnsavedDialog}
                     title={<Message msgId="resources.maps.unsavedMapConfirmTitle" />}

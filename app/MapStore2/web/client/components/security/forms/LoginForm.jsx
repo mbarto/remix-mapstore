@@ -8,7 +8,6 @@
 
 import React from 'react';
 import { FormControl, FormGroup, ControlLabel, Alert } from 'react-bootstrap';
-import Spinner from 'react-spinkit';
 import PropTypes from 'prop-types';
 
 import Message from '../../I18N/Message';
@@ -90,7 +89,7 @@ class LoginForm extends React.Component {
     };
 
     renderLoading = () => {
-        return this.state.loading ? <Spinner spinnerName="circle" key="loadingSpinner" noFadeIn overrideSpinnerClassName="spinner"/> : null;
+        return this.state.loading ? <span>Loading...</span> : null;
     };
 
     renderSubmit = () => {
@@ -107,10 +106,10 @@ class LoginForm extends React.Component {
 
     render() {
         return (
-            <form ref="loginForm">
+            <form>
                 <FormGroup>
                     <ControlLabel>{this.props.userNameText}</ControlLabel>
-                    <FormControl ref="username"
+                    <FormControl
                         key="username"
                         type="text"
                         value={this.state.username}
@@ -119,7 +118,7 @@ class LoginForm extends React.Component {
                 </FormGroup>
                 <FormGroup>
                     <ControlLabel>{this.props.passwordText}</ControlLabel>
-                    <FormControl ref="password"
+                    <FormControl
                         key="password"
                         type="password"
                         value={this.state.password}

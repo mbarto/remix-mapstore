@@ -1,5 +1,6 @@
 import { LoaderFunction } from "remix"
 import { getParam } from "../geostories/index.server"
+import { getAuthorization } from "../utils/session.server"
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url)
@@ -8,7 +9,11 @@ export const loader: LoaderFunction = async ({ request }) => {
     const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/MAP/***/thumbnail,details,featured?start=${
         page * pageSize
     }&limit=${pageSize}&includeAttributes=true`
-    const resp = await fetch(loadUrl)
+
+    const headers = await getAuthorization(request)
+    const resp = await fetch(loadUrl, {
+        headers,
+    })
     const json = await resp.json()
     return {
         mapsCount: json.totalCount,
