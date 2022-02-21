@@ -1,17 +1,12 @@
 import { LoaderFunction } from "remix"
-import { getAuthorization } from "../utils/session.server"
-
-export function getParam(url: URL, name: string, defaultValue: number): number {
-    return url.searchParams.get(name)
-        ? Number(url.searchParams.get(name))
-        : defaultValue
-}
+import { getParam } from "../geostories"
+import { getAuthorization } from "../../utils/session.server"
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url)
-    const page = getParam(url, "geostoriesPage", 0)
-    const pageSize = getParam(url, "geostoriesPageSize", 5)
-    const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/GEOSTORY/***/thumbnail,details,featured?start=${
+    const page = getParam(url, "mapsPage", 0)
+    const pageSize = getParam(url, "mapsSize", 12)
+    const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/MAP/***/thumbnail,details,featured?start=${
         page * pageSize
     }&limit=${pageSize}&includeAttributes=true`
 
@@ -21,12 +16,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     })
     const json = await resp.json()
     return {
-        geostoriesCount: json.totalCount,
-        geostories: json.results.map((map) => ({
+        mapsCount: json.totalCount,
+        maps: json.results.map((map) => ({
             id: map.id,
             title: map.name,
             description: map.description,
-            featured: false,
+            featured: map.featured,
             canEdit: map.canEdit,
             details: map.details,
             thumbnail: map.thumbnail

@@ -41,7 +41,7 @@ const Contents: React.FC<ContentsProptype> = ({ data }) => {
         if (firstRender) {
             setFirstRender(false)
         } else {
-            fetcher.load(`/?mapsPage=${mapsPage}`)
+            fetcher.load(`/maps?mapsPage=${mapsPage}`)
         }
     }, [mapsPage])
     useEffect(() => {
@@ -66,10 +66,10 @@ const Contents: React.FC<ContentsProptype> = ({ data }) => {
     }, [fetcher.data])
     useEffect(() => {
         if (selectedTab === 1) {
-            fetcher.load(`/?dashboardsPage=${dashboardsPage}`)
+            fetcher.load(`/dashboards?dashboardsPage=${dashboardsPage}`)
         }
         if (selectedTab === 2) {
-            fetcher.load(`/?geostoriesPage=${geostoriesPage}`)
+            fetcher.load(`/geostories?geostoriesPage=${geostoriesPage}`)
         }
     }, [selectedTab, dashboardsPage, geostoriesPage])
     const mapsPaginationProps = {
@@ -82,7 +82,7 @@ const Contents: React.FC<ContentsProptype> = ({ data }) => {
     }
     const dashboardsPaginationProps = {
         page: dashboardsPage,
-        pageSize: 5,
+        pageSize: 12,
         items: dashboards.items,
         total: dashboards.count,
         searchText: "",
@@ -90,7 +90,7 @@ const Contents: React.FC<ContentsProptype> = ({ data }) => {
     }
     const geostoriesPaginationProps = {
         page: geostoriesPage,
-        pageSize: 5,
+        pageSize: 12,
         items: geostories.items,
         total: geostories.count,
         searchText: "",

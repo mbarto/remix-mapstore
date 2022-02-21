@@ -1,8 +1,8 @@
 import { LoaderFunction } from "remix"
-import { getParam } from "../geostories/index.server"
+import { getParam } from "../geostories"
 import castArray from "lodash/castArray"
 import head from "lodash/head"
-import { getAuthorization } from "../utils/session.server"
+import { getAuthorization } from "../../utils/session.server"
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url)

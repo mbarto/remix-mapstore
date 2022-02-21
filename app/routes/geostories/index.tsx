@@ -1,13 +1,17 @@
 import { LoaderFunction } from "remix"
-import castArray from "lodash/castArray"
-import { getParam } from "../geostories/index.server"
-import { getAuthorization } from "../utils/session.server"
+import { getAuthorization } from "../../utils/session.server"
+
+export function getParam(url: URL, name: string, defaultValue: number): number {
+    return url.searchParams.get(name)
+        ? Number(url.searchParams.get(name))
+        : defaultValue
+}
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url)
-    const page = getParam(url, "dashboardsPage", 0)
-    const pageSize = getParam(url, "dashboardsPageSize", 5)
-    const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/DASHBOARD/***/thumbnail,details,featured?start=${
+    const page = getParam(url, "geostoriesPage", 0)
+    const pageSize = getParam(url, "geostoriesPageSize", 12)
+    const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/GEOSTORY/***/thumbnail,details,featured?start=${
         page * pageSize
     }&limit=${pageSize}&includeAttributes=true`
 
@@ -17,8 +21,8 @@ export const loader: LoaderFunction = async ({ request }) => {
     })
     const json = await resp.json()
     return {
-        dashboardsCount: json.totalCount,
-        dashboards: castArray(json.results).map((map) => ({
+        geostoriesCount: json.totalCount,
+        geostories: json.results.map((map) => ({
             id: map.id,
             title: map.name,
             description: map.description,

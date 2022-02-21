@@ -1,9 +1,9 @@
-import React, { useState } from "react"
+import React, { useRef, useState } from "react"
 import OmniBar from "./OmniBar"
 import UserMenu from "../MapStore2/web/client/components/security/UserMenu"
 import LoginModal from "../MapStore2/web/client/components/security/modals/LoginModal"
-import { useSubmit } from "remix"
-import { User } from "~/routes/utils/session.server"
+import { Form, useSubmit } from "remix"
+import { User } from "~/utils/session.server"
 
 type HeaderProps = {
     user?: User
@@ -11,23 +11,26 @@ type HeaderProps = {
 
 const Header: React.FC<HeaderProps> = ({ user }) => {
     const [showLogin, setShowLogin] = useState(false)
-    const submit = useSubmit()
+    const loginFormRef = useRef<HTMLFormElement>(null)
+    const logoutFormRef = useRef<HTMLFormElement>(null)
+    const usernameRef = useRef<HTMLInputElement>(null)
+    const passwordRef = useRef<HTMLInputElement>(null)
     const login = (username: string, password: string) => {
         setShowLogin(false)
-        submit(
-            new URLSearchParams([
-                ["action", "login"],
-                ["username", username],
-                ["password", password],
-            ]),
-            { method: "post", action: "/?index" }
-        )
+        if (
+            usernameRef.current &&
+            passwordRef.current &&
+            loginFormRef.current
+        ) {
+            usernameRef.current.value = username
+            passwordRef.current.value = password
+            loginFormRef.current.submit()
+        }
     }
     const logout = () => {
-        submit(new URLSearchParams([["action", "logout"]]), {
-            method: "post",
-            action: "/?index",
-        })
+        if (logoutFormRef.current) {
+            logoutFormRef.current.submit()
+        }
     }
     const items = [
         {
@@ -51,12 +54,38 @@ const Header: React.FC<HeaderProps> = ({ user }) => {
         <>
             <OmniBar className="navbar shadow navbar-home" items={items} />
             {showLogin && (
-                <LoginModal
-                    onClose={() => setShowLogin(false)}
-                    show
-                    onSubmit={login}
-                />
+                <>
+                    <Form
+                        action="/security/login"
+                        reloadDocument
+                        ref={loginFormRef}
+                        method="post"
+                    >
+                        <input
+                            type="hidden"
+                            name="username"
+                            ref={usernameRef}
+                        />
+                        <input
+                            type="hidden"
+                            name="password"
+                            ref={passwordRef}
+                        />
+                    </Form>
+
+                    <LoginModal
+                        onClose={() => setShowLogin(false)}
+                        show
+                        onSubmit={login}
+                    />
+                </>
             )}
+            <Form
+                action="/security/logout"
+                reloadDocument
+                ref={logoutFormRef}
+                method="post"
+            ></Form>
         </>
     )
 }

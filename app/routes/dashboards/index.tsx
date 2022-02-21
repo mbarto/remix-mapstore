@@ -1,12 +1,13 @@
 import { LoaderFunction } from "remix"
-import { getParam } from "../geostories/index.server"
-import { getAuthorization } from "../utils/session.server"
+import castArray from "lodash/castArray"
+import { getParam } from "../geostories"
+import { getAuthorization } from "../../utils/session.server"
 
 export const loader: LoaderFunction = async ({ request }) => {
     const url = new URL(request.url)
-    const page = getParam(url, "mapsPage", 0)
-    const pageSize = getParam(url, "mapsSize", 12)
-    const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/MAP/***/thumbnail,details,featured?start=${
+    const page = getParam(url, "dashboardsPage", 0)
+    const pageSize = getParam(url, "dashboardsPageSize", 12)
+    const loadUrl = `https://dev-mapstore.geosolutionsgroup.com/mapstore/rest/geostore/extjs/search/category/DASHBOARD/***/thumbnail,details,featured?start=${
         page * pageSize
     }&limit=${pageSize}&includeAttributes=true`
 
@@ -16,12 +17,12 @@ export const loader: LoaderFunction = async ({ request }) => {
     })
     const json = await resp.json()
     return {
-        mapsCount: json.totalCount,
-        maps: json.results.map((map) => ({
+        dashboardsCount: json.totalCount,
+        dashboards: castArray(json.results).map((map) => ({
             id: map.id,
             title: map.name,
             description: map.description,
-            featured: map.featured,
+            featured: false,
             canEdit: map.canEdit,
             details: map.details,
             thumbnail: map.thumbnail
